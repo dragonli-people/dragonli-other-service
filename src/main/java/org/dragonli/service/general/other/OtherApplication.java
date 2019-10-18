@@ -29,9 +29,15 @@ public class OtherApplication extends DubboApplicationBase {
 //	final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
+		Class clz1 = Class.forName("org.dragonli.service.general.other.ZookeeperLock");
+		System.out.println(clz1.getName());
+		Class clz2 = Class.forName("org.springframework.jdbc.core.PreparedStatementCallback");
+		System.out.println(clz2.getName());
+		Class clz3 = Class.forName("com.twilio.base.ResourceSet");
+		System.out.println(clz3.getName());
 
-		SpringApplication.run(OtherApplication.class, args);
+//		SpringApplication.run(OtherApplication.class, args);
 	}
 
 //	@Bean

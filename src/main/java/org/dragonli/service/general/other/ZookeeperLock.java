@@ -68,15 +68,7 @@ public class ZookeeperLock {
 			
 		});
 	}
-	
-	/**
-	 * lock
-	 */
-	public boolean lock(String lockKey,int code)
-	{
-		return this.lock(lockKey, code,null);
-	}
-	
+
 	public boolean lock(String lockKey,int code,Integer time)
 	{
 		
