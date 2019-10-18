@@ -15,12 +15,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @DubboComponentScan(basePackages = "org.dragonli.service.general.other")
 public class OtherApplication extends DubboApplicationBase {
 
-	public OtherApplication(@Value("${service.micro-service.other-service.application-name}") String applicationName,
+	public OtherApplication(@Value("${service.micro-service.simiple-other-service.application-name}") String applicationName,
 			@Value("${service.micro-service.common.registry-address}") String registryAddr,
-			@Value("${service.micro-service.other-service.protocol-name}") String protocolName,
-			@Value("${service.micro-service.other-service.protocol-port}") Integer protocolPort,
-			@Value("${service.micro-service.other-service.scan}") String registryId,
-			@Value("${service.micro-service.other-service.http-port}") int port) {
+			@Value("${service.micro-service.simiple-other-service.protocol-name}") String protocolName,
+			@Value("${service.micro-service.simiple-other-service.protocol-port}") Integer protocolPort,
+			@Value("${service.micro-service.simiple-other-service.scan}") String registryId,
+			@Value("${service.micro-service.simiple-other-service.http-port}") int port) {
 //
 		super(applicationName, registryAddr, protocolName, protocolPort, registryId, port);
 	}
