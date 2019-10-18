@@ -9,3 +9,7 @@ spring:
       fail-fast: true
 
 
+service:
+  general:
+      redis-open: true
+
