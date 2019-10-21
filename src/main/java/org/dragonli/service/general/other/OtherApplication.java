@@ -20,9 +20,11 @@ public class OtherApplication extends DubboApplicationBase {
 			@Value("${service.micro-service.simple-other-service.protocol-name}") String protocolName,
 			@Value("${service.micro-service.simple-other-service.protocol-port}") Integer protocolPort,
 			@Value("${service.micro-service.simple-other-service.scan}") String registryId,
+			@Value("${service.micro-service.simple-other-service.group}") String group,
 			@Value("${service.micro-service.simple-other-service.http-port}") int port) {
 //
-		super(applicationName, registryAddr, protocolName, protocolPort, registryId, port);
+		super(applicationName, registryAddr, protocolName, protocolPort, registryId, port,null,
+				group==null || "".equals(group=group.trim())?null:group);
 	}
 
 //	@SuppressWarnings(value="unused")

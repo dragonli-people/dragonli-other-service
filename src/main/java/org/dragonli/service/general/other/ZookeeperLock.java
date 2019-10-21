@@ -16,10 +16,10 @@ public class ZookeeperLock {
 	private int timeout;
 	
 	public ZookeeperLock(
-			@Value("${spring.lock-cinfig.zookeeperAddr}") String zkpAdd
-			,@Value("${spring.lock-cinfig.zkpTimeout}") int zkpTimeout
-			,@Value("${spring.lock-cinfig.baseKey}") String baseKey
-			,@Value("${spring.lock-cinfig.timeout}") int timeout)
+			@Value("${service.micro-service.simple-other-service.zookeeper-address}") String zkpAdd
+			,@Value("${service.micro-service.simple-other-service.zookeeper-timeout}") int zkpTimeout
+			,@Value("${service.micro-service.simple-other-service.zookeeper-base-key}") String baseKey
+			,@Value("${service.micro-service.simple-other-service.lock-timeout}") int timeout)
 	{
 		this.zkp = new ZookeeperClientUtil();
 		zkp.setServers(zkpAdd);
