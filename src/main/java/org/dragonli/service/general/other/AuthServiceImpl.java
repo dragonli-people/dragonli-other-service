@@ -8,6 +8,7 @@ import org.dragonli.service.general.interfaces.general.AuthService;
 import org.dragonli.tools.general.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,25 +22,26 @@ public class AuthServiceImpl implements AuthService {
     protected Long defaultAuthTimeout;
 
     @Override
-    public AuthDto validateAndRefresh(Map<String, Object> authDto, Boolean refreshTime, Boolean autoGenerate) {
+    public Map<String,Object> validateAndRefresh(Map<String, Object> authDto, Boolean refreshTime, Boolean autoGenerate) {
         AuthDto dto = JSON.parseObject(JSON.toJSONString(authDto),AuthDto.class);
         return validateAndRefresh( dto, refreshTime, autoGenerate);
     }
 
     @Override
-    public AuthDto validateAndRefresh(AuthDto authDto, Boolean refreshTime, Boolean autoGenerate) {
+    public Map<String,Object> validateAndRefresh(AuthDto authDto, Boolean refreshTime, Boolean autoGenerate) {
         return validateAndRefresh( authDto, refreshTime, autoGenerate, defaultPrivateKey,defaultAuthTimeout);
     }
 
     @Override
-    public AuthDto validateAndRefresh(Map<String, Object> authDto, Boolean refreshTime, Boolean autoGenerate,
+    public Map<String,Object> validateAndRefresh(Map<String, Object> authDto, Boolean refreshTime, Boolean autoGenerate,
             String privateKey,Long timeout) {
         AuthDto dto = JSON.parseObject(JSON.toJSONString(authDto),AuthDto.class);
         return validateAndRefresh( dto, refreshTime, autoGenerate,privateKey,timeout);
     }
 
     @Override
-    public AuthDto validateAndRefresh(AuthDto authDto, Boolean refreshTime, Boolean autoGenerate, String privateKey,Long timeout) {
+    @SuppressWarnings("unchecked")
+    public Map<String,Object> validateAndRefresh(AuthDto authDto, Boolean refreshTime, Boolean autoGenerate, String privateKey,Long timeout) {
         if(authDto.getUniqueId() == null || authDto.getUid()==null||authDto.getUid()<0
                || authDto.getTime() == null ||authDto.getSign()==null) return null;
         privateKey = privateKey != null ? privateKey : defaultPrivateKey;
@@ -48,29 +50,30 @@ public class AuthServiceImpl implements AuthService {
         long now = System.currentTimeMillis();
         boolean validate = authDto.getSign().equals(rightSign);
         boolean hadTimeout = Math.abs(now-authDto.getTime()) > timeout;
-        if( validate && !hadTimeout ) return authDto;// validate passed
+        if( validate && !hadTimeout ) return JSON.parseObject(JSON.toJSONString(authDto), HashMap.class);// validate passed
         if( validate && hadTimeout && refreshTime ){// let it passed
             rightSign = generateSign(authDto.getUniqueId(),authDto.getUid(),authDto.getCode(),now,privateKey);
             authDto.setSign(rightSign);
             authDto.setTime(now);
-            return authDto;
+            return JSON.parseObject(JSON.toJSONString(authDto),HashMap.class);
         }
         //now , cant be passed
-        if( autoGenerate ) return generate(null,0,"",privateKey);
+        if( autoGenerate ) return generate(null,0L,"",privateKey);
         return null;
 
     }
 
     @Override
-    public AuthDto generate(String uniqueId, long uid,String code) {
+    public Map<String,Object> generate(String uniqueId, Long uid,String code) {
         return generate( uniqueId,  uid, code, null);
     }
 
     @Override
-    public AuthDto generate(String uniqueId, long uid,String code, String privateKey) {
+    @SuppressWarnings("unchecked")
+    public Map<String,Object> generate(String uniqueId, Long uid,String code, String privateKey) {
         code = code == null ? "" : code;
         privateKey = privateKey == null ? defaultPrivateKey : privateKey;
-        uniqueId = uniqueId == null || "".equals(uniqueId) ? null : generateUniqueId(uid);
+        uniqueId = uniqueId == null || "".equals(uniqueId) ? generateUniqueId(uid) : uniqueId;
         long now = System.currentTimeMillis();
         AuthDto authDto = new AuthDto();
         authDto.setUniqueId(uniqueId);
@@ -79,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         authDto.setCode(code);
         String sign = generateSign(authDto.getUniqueId(),authDto.getUid(),authDto.getCode(),now,privateKey);
         authDto.setSign(sign);
-        return authDto;
+        return JSON.parseObject(JSON.toJSONString(authDto),HashMap.class);
     }
 
     @Override
